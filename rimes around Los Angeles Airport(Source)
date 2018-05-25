@@ -76,5 +76,5 @@ while True :
             dummy1 = -1#초기화
             dummy2 = -1
             plt.scatter(x_print, y_print, s = s_print, c = ['r','g','m','c'], alpha = 0.3)
-plt.figure(num=1,dpi=100000)
-plt.savefig("./test_figure1.png",dpi=300)
+plt.figure(num=1,dpi=1000)
+plt.savefig("./test_figure1.png",dpi=1000)
