@@ -5,7 +5,7 @@ import csv
 #지도 왼쪽 위 : 33.962207, -118.453301
 #지도 오른쪽 아래 : 33.914131, -118.366453
 #공항 왼쪽 위 : 33.958448, -118.450176
-#공항 오른쪽 아래: 33.931675, -118.370472
+#공항 오른쪽 아래: 33.931139, -118.370078
 
 im = pilimg.open('la지도.png')
 
@@ -13,10 +13,10 @@ x_range=[-118.453301,-118.366453]#지도 x축 시작과 끝 좌표
 y_range=[33.914131,33.962207]#지도 y축 시작과 끝 좌표
 
 x_airport = [-118.450176,-118.370472]#공항(=사각형) x축 시작과 끝 좌표
-y_airport = [33.931675,33.958448]#공항(=사각형) y축 시작과 끝 좌표
+y_airport = [33.931139,33.958448]#공항(=사각형) y축 시작과 끝 좌표
 
 #아래 두개는 위에 좌표이용해서 지도나타내는것임 안건드는걸 추천
-x_output=[1.57*(x_airport[0]-x_range[0])/(x_range[1]-x_range[0]),(x_airport[1]-x_range[0])/(x_range[1]-x_range[0]),(x_airport[1]-x_range[0])/(x_range[1]-x_range[0]),1.57*(x_airport[0]-x_range[0])/(x_range[1]-x_range[0]),1.57*(x_airport[0]-x_range[0])/(x_range[1]-x_range[0])]
+x_output=[1.57*(x_airport[0]-x_range[0])/(x_range[1]-x_range[0]),1.57*(x_airport[1]-x_range[0])/(x_range[1]-x_range[0]),1.57*(x_airport[1]-x_range[0])/(x_range[1]-x_range[0]),1.57*(x_airport[0]-x_range[0])/(x_range[1]-x_range[0]),1.57*(x_airport[0]-x_range[0])/(x_range[1]-x_range[0])]
 y_output=[(y_airport[0]-y_range[0])/(y_range[1]-y_range[0]),(y_airport[0]-y_range[0])/(y_range[1]-y_range[0]),(y_airport[1]-y_range[0])/(y_range[1]-y_range[0]),(y_airport[1]-y_range[0])/(y_range[1]-y_range[0]),(y_airport[0]-y_range[0])/(y_range[1]-y_range[0])]
 x_print = []#출력할 범죄 좌표 받는거 만드는곳
 y_print = []#이거도
@@ -53,9 +53,8 @@ while True :
         f = open(words+'.csv', 'r', encoding='utf-8')
         rdr = csv.reader(f)
         for line in rdr :
-            dummy5 = (float(line[1]) - x_range[0]) / (x_range[1] - x_range[0])
-            dummy6 = (float(line[0]) - y_range[0]) / (y_range[1] - y_range[0])
-            print(dummy5,dummy6)
+            dummy5 = 1.57*(float(line[1])-x_range[0])/(x_range[1]-x_range[0])
+            dummy6 = (float(line[0])-y_range[0])/(y_range[1]-y_range[0])
             finish_x = False
             finish_y = False
             while finish_x != True :
