@@ -1,0 +1,101 @@
+import matplotlib.pyplot as plt
+import PIL.Image as pilimg
+import csv
+
+#지도 왼쪽 위 : 33.962207, -118.453301
+#지도 오른쪽 아래 : 33.914131, -118.366453
+#공항 왼쪽 위 : 33.958448, -118.450176
+#공항 오른쪽 아래: 33.931139, -118.370078
+
+im = pilimg.open(r'C:\Users\PC\Downloads\la지도.png')
+
+x_range=[-118.453301,-118.366453] #지도 x축 시작과 끝 좌표
+y_range=[33.914131,33.962207] #지도 y축 시작과 끝 좌표
+
+x_airport = [-118.450176,-118.370472] #공항(=사각형) x축 시작과 끝 좌표
+y_airport = [33.931139,33.958448] #공항(=사각형) y축 시작과 끝 좌표
+
+#아래 두개는 위에 좌표이용해서 지도나타내는것임 안건드는걸 추천
+x_output=[1.57*(x_airport[0]-x_range[0])/(x_range[1]-x_range[0]),1.57*(x_airport[1]-x_range[0])/(x_range[1]-x_range[0]),1.57*(x_airport[1]-x_range[0])/(x_range[1]-x_range[0]),1.57*(x_airport[0]-x_range[0])/(x_range[1]-x_range[0]),1.57*(x_airport[0]-x_range[0])/(x_range[1]-x_range[0])]
+y_output=[(y_airport[0]-y_range[0])/(y_range[1]-y_range[0]),(y_airport[0]-y_range[0])/(y_range[1]-y_range[0]),(y_airport[1]-y_range[0])/(y_range[1]-y_range[0]),(y_airport[1]-y_range[0])/(y_range[1]-y_range[0]),(y_airport[0]-y_range[0])/(y_range[1]-y_range[0])]
+x_print = [] #출력할 범죄 좌표 받는거 만드는곳
+y_print = [] #이거도
+
+dummy1 = 0.00 #쓰레기 처리될 숫자들
+dummy2 = 0.00
+dummy3 = 0.00
+dummy4 = []
+dummy5 = 0.00
+dummy6 = 0.00
+n = 0
+s_print = []
+while dummy1 != 158 :
+    while dummy2 != 101  :
+        y_print.append(dummy2/100)
+        x_print.append(dummy1/100)
+        s_print.append(0)
+        dummy2 = dummy2 + 1
+    dummy1 = dummy1 + 1
+    dummy2 = -0
+finish_x = False #뒤에 끝났는지 확인하는 함수
+finish_y = False
+s_print2 = s_print
+while True :
+    words = input('원하는 csv파일이름을 입력해주세요.(.csv를 제외하고 입력해주세요.없다면 입력하지 말아주세요)')
+    if words == '' :
+        plt.imshow(im,extent = (0,1.57,0,1)) #이미지 출력 및 크기 조정
+        lines = plt.plot(x_output,y_output,linestyle='--') #네모 크기설정
+        plt.setp(lines, color='brown', linewidth=1.0) #네모 색깔,선두께 설정
+        plt.title('Crimes around Los Angeles Airport') #이름
+        plt.scatter(x_print, y_print, s = s_print, c = ['r','g','m','c'], alpha = 0.3)
+        plt.scatter(x_print, y_print, s = s_print2, c = ['#000000'], alpha = 1)
+        plt.figure(num=1,dpi=1000)
+        plt.savefig("./test_figure1.png",dpi=1000)
+        break
+    if input('원하는 파일명이 ' + words + '.csv가 맞습니까?(T/F)') == 'T' :
+        f = open(words+'.csv', 'r', encoding='utf-8')
+        rdr = csv.reader(f)
+        for line in rdr :
+            dummy5 = 1.57*(float(line[1])-x_range[0])/(x_range[1]-x_range[0])
+            dummy6 = (float(line[0])-y_range[0])/(y_range[1]-y_range[0])
+            finish_x = False
+            finish_y = False
+            if float(line[1]) < x_airport[0] or float(line[1]) > x_airport[1] :
+                finish_x = True
+            elif float(line[0]) < y_airport[0] or float(line[0]) > y_airport[1] :
+                finish_x = True
+            while finish_x != True :
+                dummy1 = dummy1 + 1
+                if dummy5 < dummy1/100 and dummy5 >= (dummy1-1)/100 : #이번 범위내에 x좌표가 있으면
+                    finish_x = True
+                if dummy1 > 157 :
+                    finish_x = True #x좌표 범위 밖인경우 패스
+                    dummy1 = -1
+            while finish_y != True :
+                dummy2 = dummy2 + 1
+                if dummy6 < dummy2/100 and dummy6 >= (dummy2-1)/100 and dummy1 > 0 : #이번 범위내에 y좌표가 있으면
+                    dummy4 = s_print[dummy1 * 101 + dummy2 + 1:] #뒷쪽 자르고
+                    s_print = s_print[:dummy1 * 101 + dummy2 + 1] #앞쪽 놔두고
+                    dummy3 = s_print[-1] #원하는 곳 꺼내서
+                    s_print.reverse()
+                    s_print.remove(s_print[0])
+                    s_print.reverse()
+                    dummy3 = dummy3 + 2.5 #크기 15증가
+                    s_print.append(dummy3) #증가시킨거 붙이고
+                    s_print = s_print + dummy4 #다시 합체
+                    dummy4 = s_print2[dummy1 * 101 + dummy2 + 1:]  # 뒷쪽 자르고
+                    s_print2 = s_print2[:dummy1 * 101 + dummy2 + 1]  # 앞쪽 놔두고
+                    dummy3 = s_print2[-1]  # 원하는 곳 꺼내서
+                    s_print2.reverse()
+                    s_print2.remove(s_print2[0])
+                    s_print2.reverse()
+                    dummy3 = 1  # 크기 15증가
+                    s_print2.append(dummy3)  # 증가시킨거 붙이고
+                    s_print2 = s_print2 + dummy4
+                    finish_x = True #끝남 확인
+                    finish_y = True #이것도
+                if dummy2 > 100 :
+                    finish_y = True #y좌표 범위 밖인경우 패스
+            dummy1 = -1 #초기화
+            dummy2 = -1
+            f.close()
