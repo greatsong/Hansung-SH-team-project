@@ -17,8 +17,8 @@ trendline(xx,yy,'orange',4)
 trendline(x,y,'green',4)
 trendline(xx,yy,'lime',50) #공항이용객
 
-plt.plot(x,y,marker='^',color='r',linewidth=0.4,alpha=0.5,label='Number of arrested people at LA international Airport per month')
-plt.plot(xx,yy,marker='^',color='blue',linewidth=0.4,alpha=0.5,label='Number of passengers at LA International Airport per month',)
+plt.plot(x,y,marker='.',color='r',linewidth=0.4,alpha=0.5,label='Number of arrested people at LA international Airport per month')
+plt.plot(xx,yy,marker='.',color='blue',linewidth=0.4,alpha=0.5,label='Number of passengers at LA International Airport per month',)
 plt.legend(loc='upper center',bbox_to_anchor=(0.5, 1.1))
 plt.savefig('graphwithTline.png',dpi=1000)
 plt.xticks(range(0,96),a,rotation=-20)
